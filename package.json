@@ -1,0 +1,14 @@
+{
+  "name": "pong",
+  "version": "1.0.0",
+  "description": "Pong built in pure HTML, JS, CSS",
+  "main": "index.html",
+  "scripts": {
+    "serve": "http-server"
+  },
+  "author": "Justin Stevens",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
