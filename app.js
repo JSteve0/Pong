@@ -1,33 +1,36 @@
-let lastRender = 0;
 
 var pong = {
     canvas : document.createElement("canvas"),
     frameCount : 0,
+    deltaTime : 0,
+    lastRenderTime : 0,
     start : function() {
         this.canvas.width = getWidth();
         this.canvas.height = getHeight();
         document.body.appendChild(this.canvas);
         this.ctx = this.canvas.getContext("2d");
-        this.ball = new Ball(getWidth() / 2, getHeight() / 2, 25);
+        this.ball = new Ball(getWidth() / 2, getHeight() / 2, 15);
         this.paddle = new Paddle();
-        this.keys = []
+        this.ai = new AI();
+        this.keys = [];
         window.requestAnimationFrame(gameLoop);
     }
 }
 
 function gameLoop(timestamp) {
-    let deltaTime = timestamp - lastRender;
+    pong.deltaTime = timestamp - pong.lastRenderTime;
 
-    update(deltaTime);
+    update(pong.deltaTime);
     draw();
-    processKeys(deltaTime);
+    processKeys(pong.deltaTime);
 
-    lastRender = timestamp;
+    pong.lastRenderTime = timestamp;
     window.requestAnimationFrame(gameLoop);
 }
 
 function update(deltaTime) {
-    pong.ball.update(deltaTime);
+    pong.ball.update(deltaTime, pong.paddle, pong.ai);
+    pong.ai.update(deltaTime, pong.ball);
 }
 
 function draw() {
@@ -44,6 +47,8 @@ function draw() {
     pong.ball.draw(pong.ctx);
 
     pong.paddle.draw(pong.ctx);
+
+    pong.ai.draw(pong.ctx);
 }
 
 function processKeys(deltaTime) {

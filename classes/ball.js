@@ -13,8 +13,10 @@ class Ball {
         ctx.fill();
     }
 
-    update(deltaTime) {
+    update(deltaTime, paddle1, paddle2) {
         this.checkBounds();
+        this.collides(paddle1);
+        this.collides(paddle2);
         this.x += this.velocity.x * deltaTime;
         this.y += this.velocity.y * deltaTime;
     }
@@ -26,8 +28,25 @@ class Ball {
             this.velocity.y = -this.velocity.y;
         }
         // Horizontal bounds
-        if ((this.x - this.radius < 0 && this.velocity.x < 0) || 
+        else if ((this.x - this.radius < 0 && this.velocity.x < 0) || 
             (this.x + this.radius > getWidth() && this.velocity.x > 0)){
+            this.velocity.x = -this.velocity.x;
+        }
+    }
+
+    collides(paddle) {
+        if (this.x - this.radius < paddle.x + paddle.width && 
+            this.x - this.radius > paddle.x &&
+            this.y + this.radius > paddle.y && 
+            this.y - this.radius < paddle.y + paddle.height) 
+        {
+            this.velocity.x = -this.velocity.x;
+        }
+        if (this.x + this.radius < paddle.x + paddle.width && 
+            this.x + this.radius > paddle.x &&
+            this.y + this.radius > paddle.y && 
+            this.y - this.radius < paddle.y + paddle.height) 
+        {
             this.velocity.x = -this.velocity.x;
         }
     }

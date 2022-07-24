@@ -13,10 +13,14 @@ class Paddle {
     }
 
     moveUp(deltaTime) {
-        this.y -= this.speed * deltaTime;
+        if (this.y > 0) {
+            this.y -= this.speed * deltaTime;
+        }
     }
 
     moveDown(deltaTime) {
-        this.y += this.speed * deltaTime;
+        if (this.y + this.height < getHeight()) {
+            this.y += this.speed * deltaTime;
+        }
     }
 }

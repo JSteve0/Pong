@@ -4,7 +4,7 @@
   "description": "Pong built in pure HTML, JS, CSS",
   "main": "index.html",
   "scripts": {
-    "serve": "http-server"
+    "serve": "http-server -c-1 -p 8081"
   },
   "author": "Justin Stevens",
   "license": "ISC",
