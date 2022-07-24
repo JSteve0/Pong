@@ -2,6 +2,10 @@
 
 Pong clone built in pure HTML, JS, CSS by Justin Stevens
 
+Play game here: https://jsteve0.github.io/Pong/
+
+To run locally, read the steps below
+
 ## Requirements
 
 * Node
