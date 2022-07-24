@@ -1,3 +1,7 @@
+## Pong
+
+Pong clone built in pure HTML, JS, CSS by Justin Stevens
+
 ## Requirements
 
 * Node
@@ -16,7 +20,10 @@ cd Pong
 npm install
 ```
 
+## Play
+
 Start the server
+
 
 ```bash
 npm run serve
