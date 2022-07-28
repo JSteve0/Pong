@@ -5,6 +5,7 @@ class AI {
         this.x = getWidth() - (0.05 * getWidth()) - this.width;
         this.y = (0.5 * getHeight()) - (this.height / 2);
         this.speed = 0.5;
+        this.score = 0;
     }
 
     draw(ctx) {

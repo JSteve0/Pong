@@ -5,6 +5,7 @@ class Paddle {
         this.width = 0.015 * getWidth();
         this.y = (0.5 * getHeight()) - (this.height / 2);
         this.speed = 0.5;
+        this.score = 0;
     }
 
     draw(ctx) {

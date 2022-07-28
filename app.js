@@ -1,9 +1,16 @@
+const INTRO = 0;
+const PLAYING = 1;
+const OUTRO = 2;
+const PAUSE = 3;
 
 var pong = {
     canvas : document.createElement("canvas"),
     frameCount : 0,
+    totalTime: 1,
+    frameRate: 60,
     deltaTime : 0,
     lastRenderTime : 0,
+    gameState : INTRO,
     start : function() {
         this.canvas.width = getWidth();
         this.canvas.height = getHeight();
@@ -24,13 +31,32 @@ function gameLoop(timestamp) {
     draw();
     processKeys(pong.deltaTime);
 
+    pong.totalTime += pong.deltaTime;
+    pong.frameCount++;
     pong.lastRenderTime = timestamp;
     window.requestAnimationFrame(gameLoop);
 }
 
 function update(deltaTime) {
-    pong.ball.update(deltaTime, pong.paddle, pong.ai);
-    pong.ai.update(deltaTime, pong.ball);
+    if (pong.gameState === INTRO) {
+
+    } else if (pong.gameState === PLAYING) {
+        pong.ball.update(deltaTime, pong.paddle, pong.ai);
+        pong.ai.update(deltaTime, pong.ball);
+    } else if (pong.gameState === OUTRO) {
+
+    } else if (pong.gameState === PAUSE) {
+
+    }
+
+    if (pong.frameCount % Math.ceil(pong.frameRate) === 0 && pong.frameCount !== 0) {
+        pong.frameRate = pong.frameCount / (pong.totalTime / 1000);
+    }
+
+    if (pong.frameCount % Math.ceil(pong.frameRate * 4) === 0 && pong.frameCount !== 0) {
+        pong.frameCount = 0;
+        pong.totalTime = 0;
+    }
 }
 
 function draw() {
@@ -49,15 +75,49 @@ function draw() {
     pong.paddle.draw(pong.ctx);
 
     pong.ai.draw(pong.ctx);
+
+    pong.ctx.font = "20px Arial"
+
+    let frameRateTxt = pong.frameRate.toFixed(1).toString();
+
+    pong.ctx.fillText(frameRateTxt, getWidth() - textWidth(frameRateTxt) - 5, 20);
+
+    if (pong.gameState === INTRO) {
+        pong.ctx.fillText("INTRO", 5, 20);
+
+        let text = "Press Space To Start";
+        pong.ctx.font = "50px Arial"
+        pong.ctx.fillText(text, (getWidth() / 2) - (textWidth(text) / 2), getHeight() * 0.33);
+    } else if (pong.gameState === PLAYING) {
+        pong.ctx.fillText("PLAYING", 5, 20);
+    } else if (pong.gameState === OUTRO) {
+        pong.ctx.fillText("OUTRO", 5, 20);
+    } else if (pong.gameState === PAUSE) {
+        pong.ctx.fillText("PAUSE", 5, 20);
+    }
+}
+
+function textWidth(text) {
+    return pong.ctx.measureText(text).width;
 }
 
 function processKeys(deltaTime) {
-    if (pong.keys["w"] || pong.keys["ArrowUp"]) {
-        pong.paddle.moveUp(deltaTime);
-    }
-    if (pong.keys["s"] || pong.keys["ArrowDown"]) {
-        pong.paddle.moveDown(deltaTime);
-    }
+    if (pong.gameState === INTRO) {
+        if (pong.keys[" "]) {
+            pong.gameState = PLAYING;
+        }
+    } else if (pong.gameState === PLAYING) {
+        if (pong.keys["w"] || pong.keys["ArrowUp"]) {
+            pong.paddle.moveUp(deltaTime);
+        }
+        if (pong.keys["s"] || pong.keys["ArrowDown"]) {
+            pong.paddle.moveDown(deltaTime);
+        }
+    } else if (pong.gameState === OUTRO) {
+
+    } else if (pong.gameState === PAUSE) {
+
+    } 
 }
 
 function background(color) {
