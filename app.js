@@ -20,6 +20,7 @@ var pong = {
         this.paddle = new Paddle();
         this.ai = new AI();
         this.keys = [];
+        this.backgroundMusic = new Sound("./sounds/arcadeMusic.mp3");
         window.requestAnimationFrame(gameLoop);
     }
 }
@@ -105,6 +106,7 @@ function processKeys(deltaTime) {
     if (pong.gameState === INTRO) {
         if (pong.keys[" "]) {
             pong.gameState = PLAYING;
+            pong.backgroundMusic.play();
         }
     } else if (pong.gameState === PLAYING) {
         if (pong.keys["w"] || pong.keys["ArrowUp"]) {
