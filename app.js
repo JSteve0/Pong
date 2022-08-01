@@ -21,6 +21,24 @@ var pong = {
         this.ai = new AI();
         this.keys = [];
         this.backgroundMusic = new Sound("./sounds/arcadeMusic.mp3");
+
+        this.button = document.createElement("button");
+        this.button.innerHTML = "Play";
+        this.button.style.top = (getHeight() * 0.3).toString() + "px";
+        let buttonWidth = 300;
+        this.button.style.width = buttonWidth.toString() + "px";
+        this.button.style.left = ((getWidth() / 2) - (buttonWidth / 2)).toString() + "px";
+        this.button.onclick = function () { pong.gameState = PLAYING }
+        document.body.appendChild(this.button);
+
+        this.githubLink = document.createElement("a");
+        this.githubLink.innerHTML = "Author: Justin Stevens";
+        this.githubLink.classList.add('link');
+        this.githubLink.style.top = getHeight() - 24 + "px";
+        this.githubLink.href = 'https://github.com/JSteve0'
+        this.githubLink.target = '_blank';
+        document.body.appendChild(this.githubLink);
+
         window.requestAnimationFrame(gameLoop);
     }
 }
@@ -40,8 +58,9 @@ function gameLoop(timestamp) {
 
 function update(deltaTime) {
     if (pong.gameState === INTRO) {
-
+        pong.button.style.display = 'block';
     } else if (pong.gameState === PLAYING) {
+        pong.button.style.display = 'none';
         pong.ball.update(deltaTime, pong.paddle, pong.ai);
         pong.ai.update(deltaTime, pong.ball);
     } else if (pong.gameState === OUTRO) {
@@ -63,19 +82,7 @@ function update(deltaTime) {
 function draw() {
     background('black');
 
-    //Draw Center Line
-    pong.ctx.beginPath();
-    pong.ctx.lineWidth = 1;
-    pong.ctx.strokeStyle = 'white';
-    pong.ctx.moveTo(getWidth() / 2, 0);
-    pong.ctx.lineTo(getWidth() / 2, getHeight());
-    pong.ctx.stroke();
-
-    pong.ball.draw(pong.ctx);
-
-    pong.paddle.draw(pong.ctx);
-
-    pong.ai.draw(pong.ctx);
+    pong.ctx.fillStyle = 'white';
 
     pong.ctx.font = "20px Arial"
 
@@ -84,13 +91,21 @@ function draw() {
     pong.ctx.fillText(frameRateTxt, getWidth() - textWidth(frameRateTxt) - 5, 20);
 
     if (pong.gameState === INTRO) {
-        pong.ctx.fillText("INTRO", 5, 20);
-
-        let text = "Press Space To Start";
-        pong.ctx.font = "50px Arial"
-        pong.ctx.fillText(text, (getWidth() / 2) - (textWidth(text) / 2), getHeight() * 0.33);
+        pong.ctx.fillText("INTRO", 5 , 20);
     } else if (pong.gameState === PLAYING) {
         pong.ctx.fillText("PLAYING", 5, 20);
+
+        //Draw Center Line
+        pong.ctx.beginPath();
+        pong.ctx.lineWidth = 1;
+        pong.ctx.strokeStyle = 'white';
+        pong.ctx.moveTo(getWidth() / 2, 0);
+        pong.ctx.lineTo(getWidth() / 2, getHeight());
+        pong.ctx.stroke();
+
+        pong.ball.draw(pong.ctx);
+        pong.paddle.draw(pong.ctx);
+        pong.ai.draw(pong.ctx);
     } else if (pong.gameState === OUTRO) {
         pong.ctx.fillText("OUTRO", 5, 20);
     } else if (pong.gameState === PAUSE) {
@@ -103,6 +118,19 @@ function textWidth(text) {
 }
 
 function processKeys(deltaTime) {
+    if (pong.keys["1"]) {
+        pong.gameState = INTRO;
+    }
+    if (pong.keys["2"]) {
+        pong.gameState = PLAYING;
+    }
+    if (pong.keys["3"]) {
+        pong.gameState = OUTRO;
+    }
+    if (pong.keys["4"]) {
+        pong.gameState = PAUSE;
+    }
+
     if (pong.gameState === INTRO) {
         if (pong.keys[" "]) {
             pong.gameState = PLAYING;
