@@ -25,11 +25,10 @@ var pong = {
         this.button = document.createElement("button");
         this.button.innerHTML = "Play";
         this.button.style.top = (getHeight() * 0.3).toString() + "px";
-        let buttonWidth = 300;
-        this.button.style.width = buttonWidth.toString() + "px";
-        this.button.style.left = ((getWidth() / 2) - (buttonWidth / 2)).toString() + "px";
         this.button.onclick = function () { pong.gameState = PLAYING }
         document.body.appendChild(this.button);
+        this.button.style.width = this.button.offsetWidth.toString() + "px";
+        this.button.style.left = ((getWidth() / 2) - (this.button.offsetWidth)).toString() + "px";
 
         this.githubLink = document.createElement("a");
         this.githubLink.innerHTML = "Author: Justin Stevens";

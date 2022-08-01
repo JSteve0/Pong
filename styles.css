@@ -9,7 +9,7 @@ button {
     background-color: transparent;
     color: white;
     border: 3px solid white;
-    /* width: 300px; */ /* Set in js */
+    width: 300px;
     height: 75px;
     cursor: pointer;
     font-family: Arial, serif;
