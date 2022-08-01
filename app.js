@@ -26,11 +26,15 @@ const pong = {
         this.button.innerHTML = "Play";
         this.button.style.top = (getHeight() * 0.3).toString() + "px";
         this.button.onclick = function () {
-            pong.gameState = PLAYING
+            pong.gameState = PLAYING;
         }
         document.body.appendChild(this.button);
         this.button.style.width = this.button.offsetWidth.toString() + "px";
         this.button.style.left = ((getWidth() / 2) - (this.button.offsetWidth)).toString() + "px";
+        this.button.onmouseover = function () {
+            pong.button.style.animationDuration = '1s';
+        }
+
 
         this.githubLink = document.createElement("a");
         this.githubLink.innerHTML = "Author: Justin Stevens";

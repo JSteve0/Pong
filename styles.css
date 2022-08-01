@@ -15,8 +15,8 @@ button {
     font-family: Arial, serif;
     font-size: 50px;
 
-    animation-name: 'shift-out';
-    animation-duration: 1s;
+    animation-name: shift-out;
+    animation-duration: 0s;
 }
 
 button:hover {
