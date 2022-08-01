@@ -14,14 +14,40 @@ button {
     cursor: pointer;
     font-family: Arial, serif;
     font-size: 50px;
+
+    animation-name: 'shift-out';
+    animation-duration: 1s;
 }
 
 button:hover {
-    background: white;
-    color: black;
+    animation-name: shift-in;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
 }
 
 .link {
     position: absolute;
     left: 8px;
+}
+
+@keyframes shift-in {
+    from {
+        background: black;
+        color: white;
+    }
+    to {
+        background: white;
+        color: black;
+    }
+}
+
+@keyframes shift-out {
+    from {
+        background: white;
+        color: black;
+    }
+    to {
+        background: black;
+        color: white;
+    }
 }

@@ -3,15 +3,15 @@ const PLAYING = 1;
 const OUTRO = 2;
 const PAUSE = 3;
 
-var pong = {
-    canvas : document.createElement("canvas"),
-    frameCount : 0,
+const pong = {
+    canvas: document.createElement("canvas"),
+    frameCount: 0,
     totalTime: 1,
     frameRate: 60,
-    deltaTime : 0,
-    lastRenderTime : 0,
-    gameState : INTRO,
-    start : function() {
+    deltaTime: 0,
+    lastRenderTime: 0,
+    gameState: INTRO,
+    start: function () {
         this.canvas.width = getWidth();
         this.canvas.height = getHeight();
         document.body.appendChild(this.canvas);
@@ -25,7 +25,9 @@ var pong = {
         this.button = document.createElement("button");
         this.button.innerHTML = "Play";
         this.button.style.top = (getHeight() * 0.3).toString() + "px";
-        this.button.onclick = function () { pong.gameState = PLAYING }
+        this.button.onclick = function () {
+            pong.gameState = PLAYING
+        }
         document.body.appendChild(this.button);
         this.button.style.width = this.button.offsetWidth.toString() + "px";
         this.button.style.left = ((getWidth() / 2) - (this.button.offsetWidth)).toString() + "px";
@@ -40,7 +42,7 @@ var pong = {
 
         window.requestAnimationFrame(gameLoop);
     }
-}
+};
 
 function gameLoop(timestamp) {
     pong.deltaTime = timestamp - pong.lastRenderTime;
