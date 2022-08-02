@@ -16,7 +16,7 @@ const pong = {
         this.canvas.height = getHeight();
         document.body.appendChild(this.canvas);
         this.ctx = this.canvas.getContext("2d");
-        this.ball = new Ball(getWidth() / 2, getHeight() / 2, 15);
+        this.ball = new Ball(getWidth() / 2, getHeight() / 2, 12);
         this.paddle = new Paddle();
         this.ai = new AI();
         this.keys = [];
@@ -25,15 +25,16 @@ const pong = {
         this.button = document.createElement("button");
         this.button.innerHTML = "Play";
         this.button.style.top = (getHeight() * 0.3).toString() + "px";
+        this.button.style.animationDuration = '0s';
         this.button.onclick = function () {
             pong.gameState = PLAYING;
+        }
+        this.button.onmouseover = function () {
+            pong.button.style.animationDuration = '0.5s';
         }
         document.body.appendChild(this.button);
         this.button.style.width = this.button.offsetWidth.toString() + "px";
         this.button.style.left = ((getWidth() / 2) - (this.button.offsetWidth)).toString() + "px";
-        this.button.onmouseover = function () {
-            pong.button.style.animationDuration = '1s';
-        }
 
 
         this.githubLink = document.createElement("a");
@@ -93,12 +94,14 @@ function draw() {
 
     let frameRateTxt = pong.frameRate.toFixed(1).toString();
 
-    pong.ctx.fillText(frameRateTxt, getWidth() - textWidth(frameRateTxt) - 5, 20);
+    pong.ctx.textAlign = 'right';
+    pong.ctx.fillText(frameRateTxt, getWidth() - 8, 20);
+    pong.ctx.textAlign = 'left';
 
     if (pong.gameState === INTRO) {
-        pong.ctx.fillText("INTRO", 5 , 20);
+        pong.ctx.fillText("INTRO", 8 , 20);
     } else if (pong.gameState === PLAYING) {
-        pong.ctx.fillText("PLAYING", 5, 20);
+        pong.ctx.fillText("PLAYING", 8, 20);
 
         //Draw Center Line
         pong.ctx.beginPath();
@@ -108,13 +111,20 @@ function draw() {
         pong.ctx.lineTo(getWidth() / 2, getHeight());
         pong.ctx.stroke();
 
+        //Draw Score
+        pong.ctx.font = "100px Arial";
+        pong.ctx.textAlign = 'right';
+        pong.ctx.fillText(pong.paddle.score.toString(), (getWidth() / 2) - 8, 85);
+        pong.ctx.textAlign = 'left';
+        pong.ctx.fillText(pong.ai.score.toString(), (getWidth() / 2) + 8, 85);
+
         pong.ball.draw(pong.ctx);
         pong.paddle.draw(pong.ctx);
         pong.ai.draw(pong.ctx);
     } else if (pong.gameState === OUTRO) {
-        pong.ctx.fillText("OUTRO", 5, 20);
+        pong.ctx.fillText("OUTRO", 8, 20);
     } else if (pong.gameState === PAUSE) {
-        pong.ctx.fillText("PAUSE", 5, 20);
+        pong.ctx.fillText("PAUSE", 8, 20);
     }
 }
 

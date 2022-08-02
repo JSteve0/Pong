@@ -16,12 +16,10 @@ button {
     font-size: 50px;
 
     animation-name: shift-out;
-    animation-duration: 0s;
 }
 
 button:hover {
     animation-name: shift-in;
-    animation-duration: 1s;
     animation-fill-mode: forwards;
 }
 
