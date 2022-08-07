@@ -1,8 +1,8 @@
 class Paddle {
     constructor () {
-        this.x = 0.05 * getWidth();
         this.height = 0.15 * getHeight();
         this.width = 0.01 * getWidth();
+        this.x = 0.05 * getWidth();
         this.y = (0.5 * getHeight()) - (this.height / 2);
         this.speed = getHeight() * 0.0005;
         this.score = 0;
@@ -24,4 +24,13 @@ class Paddle {
             this.y += this.speed * deltaTime;
         }
     }
+
+    reset() {
+        this.height = 0.15 * getHeight();
+        this.width = 0.01 * getWidth();
+        this.x = 0.05 * getWidth();
+        this.y = (0.5 * getHeight()) - (this.height / 2);
+        this.speed = getHeight() * 0.0005;
+    }
+
 }

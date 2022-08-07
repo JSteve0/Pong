@@ -1,10 +1,8 @@
 class Ball {
-    constructor(x, y, radius) {
-        this.x = x;
-        this.y = y;
-        this.orginalX = this.x;
-        this.orginalY = this.y;
-        this.radius = radius;
+    constructor() {
+        this.x = getWidth() / 2;
+        this.y = getHeight() / 2;
+        this.radius = 12;
         this.maxSpeed = getWidth() * 0.0005;
         this.maxAngle = 50;
         this.velocity = {x: getWidth() * 0.0002, y: 0};
@@ -19,14 +17,14 @@ class Ball {
     }
 
     update(deltaTime, paddle1, paddle2) {
-        this.checkBounds();
+        this.checkBounds(paddle1, paddle2);
         this.collides(paddle1);
         this.collides(paddle2);
         this.x += this.velocity.x * deltaTime;
         this.y += this.velocity.y * deltaTime;
     }
 
-    checkBounds() {
+    checkBounds(paddle1, paddle2) {
         // Vertical bounds
         if ((this.y - this.radius < 0 && this.velocity.y < 0) ||
             (this.y + this.radius > getHeight() && this.velocity.y > 0)) {
@@ -34,21 +32,22 @@ class Ball {
         }
         // Left bound
         else if (this.x - this.radius < 0 && this.velocity.x < 0) {
-            pong.ai.score++;
+            paddle1.score++;
             this.reset();
             this.velocity.x = -Math.abs(this.velocity.x);
         }
         // Right bound
         else if (this.x + this.radius > getWidth() && this.velocity.x > 0) {
-            pong.paddle.score++;
+            paddle2.score++;
             this.reset();
             this.velocity.x = Math.abs(this.velocity.x);
         }
     }
 
     reset() {
-        this.x = this.orginalX;
-        this.y = this.orginalY;
+        this.x = getWidth() / 2;
+        this.y = getHeight() / 2;
+        this.orginalVelocity = {x: getWidth() * 0.0002, y: 0};
         this.velocity.x = this.orginalVelocity.x;
         this.velocity.y = this.orginalVelocity.y;
     }

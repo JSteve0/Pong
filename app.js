@@ -16,15 +16,17 @@ const pong = {
         this.canvas.height = getHeight();
         document.body.appendChild(this.canvas);
         this.ctx = this.canvas.getContext("2d");
-        this.ball = new Ball(getWidth() / 2, getHeight() / 2, 12);
-        this.paddle = new Paddle();
+        this.ball = new Ball();
+        this.player = new Paddle();
         this.ai = new AI();
         this.keys = [];
         this.backgroundMusic = new Sound("./sounds/arcadeMusic.mp3");
 
-        this.button = document.createElement("button");
-        this.button.innerHTML = "Play";
-        this.button.style.top = (getHeight() * 0.3).toString() + "px";
+
+        this.button = createButton('Play', 0, (getHeight() * 0.3));
+        this.button.height = function () { return getHeight() * 0.3 }
+        this.button.width = function () { return (pong.button.offsetWidth / 2) }
+        this.button.style.left = (getWidth() / 2) - pong.button.width() + "px";
         this.button.style.animationDuration = '0s';
         this.button.onclick = function () {
             pong.gameState = PLAYING;
@@ -32,10 +34,10 @@ const pong = {
         this.button.onmouseover = function () {
             pong.button.style.animationDuration = '0.5s';
         }
-        document.body.appendChild(this.button);
-        this.button.style.width = this.button.offsetWidth.toString() + "px";
-        this.button.style.left = ((getWidth() / 2) - (this.button.offsetWidth)).toString() + "px";
-
+        this.button.reset = function () {
+            pong.button.style.top = pong.button.height() + "px";
+            pong.button.style.left = (getWidth() / 2) - pong.button.width() + "px";
+        }
 
         this.githubLink = document.createElement("a");
         this.githubLink.innerHTML = "Author: Justin Stevens";
@@ -44,6 +46,7 @@ const pong = {
         this.githubLink.href = 'https://github.com/JSteve0'
         this.githubLink.target = '_blank';
         document.body.appendChild(this.githubLink);
+        this.githubLink.reset = function () { pong.githubLink.style.top = getHeight() - 24 + "px"; }
 
         window.requestAnimationFrame(gameLoop);
     }
@@ -67,7 +70,7 @@ function update(deltaTime) {
         pong.button.style.display = 'block';
     } else if (pong.gameState === PLAYING) {
         pong.button.style.display = 'none';
-        pong.ball.update(deltaTime, pong.paddle, pong.ai);
+        pong.ball.update(deltaTime, pong.player, pong.ai);
         pong.ai.update(deltaTime, pong.ball);
     } else if (pong.gameState === OUTRO) {
 
@@ -114,12 +117,12 @@ function draw() {
         //Draw Score
         pong.ctx.font = "100px Arial";
         pong.ctx.textAlign = 'right';
-        pong.ctx.fillText(pong.paddle.score.toString(), (getWidth() / 2) - 8, 85);
+        pong.ctx.fillText(pong.player.score.toString(), (getWidth() / 2) - 8, 85);
         pong.ctx.textAlign = 'left';
         pong.ctx.fillText(pong.ai.score.toString(), (getWidth() / 2) + 8, 85);
 
         pong.ball.draw(pong.ctx);
-        pong.paddle.draw(pong.ctx);
+        pong.player.draw(pong.ctx);
         pong.ai.draw(pong.ctx);
     } else if (pong.gameState === OUTRO) {
         pong.ctx.fillText("OUTRO", 8, 20);
@@ -153,10 +156,10 @@ function processKeys(deltaTime) {
         }
     } else if (pong.gameState === PLAYING) {
         if (pong.keys["w"] || pong.keys["ArrowUp"]) {
-            pong.paddle.moveUp(deltaTime);
+            pong.player.moveUp(deltaTime);
         }
         if (pong.keys["s"] || pong.keys["ArrowDown"]) {
-            pong.paddle.moveDown(deltaTime);
+            pong.player.moveDown(deltaTime);
         }
     } else if (pong.gameState === OUTRO) {
 
@@ -173,7 +176,6 @@ function background(color) {
 function getWidth() {
     return Math.max(
         document.body.scrollWidth,
-        document.documentElement.scrollWidth,
         document.body.offsetWidth,
         document.documentElement.offsetWidth,
         document.documentElement.clientWidth
@@ -183,7 +185,6 @@ function getWidth() {
 function getHeight() {
     return Math.max(
         document.body.scrollHeight,
-        document.documentElement.scrollHeight,
         document.body.offsetHeight,
         document.documentElement.offsetHeight,
         document.documentElement.clientHeight
@@ -193,6 +194,38 @@ function getHeight() {
 function resizeCanvas() {
     pong.canvas.width = window.innerWidth;
     pong.canvas.height = window.innerHeight;
+    resetScreen();
+}
+
+function createButton(text, x, y) {
+    let button = document.createElement("button");
+    button.innerHTML = text;
+    button.style.position = 'absolute';
+    button.style.left = x + 'px';
+    button.style.top = y + 'px';
+    document.body.appendChild(button);
+    return button;
+}
+
+function createButtonComplex(text, x, y, width, height, color, onClick, style) {
+    let button = document.createElement("button");
+    button.innerHTML = text;
+    button.style.position = 'absolute';
+    button.style.left = x + "px";
+    button.style.top = y + "px";
+    button.style.width = width + "px";
+    button.style.height = height + "px";
+    button.onclick = onClick;
+    document.body.appendChild(button);
+    return button;
+}
+
+function resetScreen() {
+    pong.ball.reset();
+    pong.button.reset();
+    pong.githubLink.reset();
+    pong.player.reset();
+    pong.ai.reset();
 }
 
 // Event handler to resize the canvas when the document view is changed
